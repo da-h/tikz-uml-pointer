@@ -1,0 +1,106 @@
+\tikzstyle{tikzuml pointto style}=[color=\tikzumlDefaultDrawColor, -triangle 45]%
+\newcommand{\umlpointto}[3][]{\umlrelation[style={tikzuml pointto style}, #1]{#2}{#3}}%
+
+
+\newcommand{\umlnullptr}[2][]{%
+    \pgfkeys{/tikzuml/umlnullptr/.cd, x/.initial=\tikzumlDefaultX, y/.initial=\tikzumlDefaultX, name/.initial=umlnullptr-\thetikzumlUseCaseNum,%
+        style/.style={},%
+    }%
+    \pgfkeys{/tikzuml/umlnullptr/.cd, #1}%
+    \pgfkeys{/tikzuml/umlnullptr/.cd,%
+        x/.get=\tikzumlpointerX, y/.get=\tikzumlpointerY, name/.get=\tikzumlpointerName%
+    }%
+    \node[] (\tikzumlpointerName) at (\tikzumlpointerX,\tikzumlpointerY) {nullptr};
+}
+
+\pgfkeys{/tikz/type/.initial=tikzumlEmpty}
+\pgfkeys{/tikz/value/.initial=tikzumlEmpty}
+\tikzstyle{umlvalue}=[regular polygon, regular polygon sides=6, minimum width=1cm, xscale=1.5, draw]%
+\newcommand{\umlpointer}[2][]{%
+    \pgfkeys{/tikzuml/umlpointer/.cd, x/.initial=\tikzumlDefaultX, y/.initial=\tikzumlDefaultX, width/.initial=auto,%
+        name/.initial=umlpointer-\thetikzumlUseCaseNum,%
+        label/.initial=tikzumlEmpty,%
+        type/.initial=tikzumlEmpty,%
+        draw/.initial=\tikzumlDefaultDrawColor, fill/.initial=\tikzumlUseCaseDefaultFillColor,%
+        text/.initial=\tikzumlDefaultTextColor, style/.style={},%
+    }%
+    \pgfkeys{umlvalue/.style={regular polygon, regular polygon sides=6, minimum width=1cm, xscale=1.5, draw}}
+    \pgfkeys{/tikzuml/umlpointer/.cd, #1}%
+    \pgfkeys{/tikzuml/umlpointer/.cd,%
+        x/.get=\tikzumlpointerX, y/.get=\tikzumlpointerY, width/.get=\tikzumlpointerTextWidth,%
+        name/.get=\tikzumlpointerName,%
+        label/.get=\tikzumlpointerLabel,%
+        type/.get=\tikzumlpointerType,%
+        draw/.get=\tikzumlpointerDrawColor, fill/.get=\tikzumlpointerFillColor,%
+        text/.get=\tikzumlpointerTextColor%
+    }%
+    \ifthenelse{\equal{\tikzumlpointerLabel}{tikzumlEmpty}}{%
+        \def\tikzumlpointerLabel{}%
+      }{%
+      }%
+    \ifthenelse{\equal{\tikzumlpointerType}{tikzumlEmpty}}{%
+        \def\tikzumlpointerType{}%
+      }{%
+      }%
+    %
+    \umlusecase[x=\tikzumlpointerX,y=\tikzumlpointerY,width=\tikzumlpointerTextWidth,name=\tikzumlpointerName,draw=\tikzumlpointerDrawColor,fill=\tikzumlpointerFillColor,text=\tikzumlpointerTextColor]{#2};
+    \node[umlvalue,label=below:\tikzumlpointerType, #1] (\tikzumlpointerName) at (\tikzumlpointerName) {};
+}%
+
+\newcommand{\umlstructvalue}[2][]{%
+    \pgfkeys{/tikzuml/umlstructvalue/.cd, x/.initial=\tikzumlDefaultX, y/.initial=\tikzumlDefaultX, width/.initial=auto,%
+        name/.initial=umlstructvalue-\thetikzumlUseCaseNum,%
+        label/.initial=tikzumlEmpty,%
+        value/.initial=tikzumlEmpty,%
+        type/.initial=tikzumlEmpty,%
+        draw/.initial=\tikzumlDefaultDrawColor, fill/.initial=\tikzumlUseCaseDefaultFillColor,%
+        text/.initial=\tikzumlDefaultTextColor, style/.style={},%
+    }%
+    \pgfkeys{structvalue/.style={regular polygon, regular polygon sides=6, minimum width=1cm, xscale=1.5, draw}}
+    \pgfkeys{/tikzuml/umlstructvalue/.cd, #1}%
+    \pgfkeys{/tikzuml/umlstructvalue/.cd,%
+        x/.get=\tikzumlstructvalueX, y/.get=\tikzumlstructvalueY, width/.get=\tikzumlstructvalueTextWidth,%
+        name/.get=\tikzumlstructvalueName,%
+        label/.get=\tikzumlstructvalueLabel,%
+        value/.get=\tikzumlstructvalueValue,%
+        type/.get=\tikzumlstructvalueType,%
+        draw/.get=\tikzumlstructvalueDrawColor, fill/.get=\tikzumlstructvalueFillColor,%
+        text/.get=\tikzumlstructvalueTextColor%
+    }%
+    \ifthenelse{\equal{\tikzumlstructvalueLabel}{tikzumlEmpty}}{%
+        \def\tikzumlstructvalueLabel{}%
+      }{%
+      }%
+    %
+    \ifthenelse{\equal{\tikzumlstructvalueValue}{tikzumlEmpty}}{%
+        \def\tikzumlstructvalueValue{}%
+      }{%
+      }%
+    %
+    \ifthenelse{\equal{\tikzumlstructvalueType}{tikzumlEmpty}}{%
+        \def\tikzumlstructvalueType{}%
+      }{%
+      }%
+    %
+    \umlusecase[x=\tikzumlstructvalueX,y=\tikzumlstructvalueY,width=\tikzumlstructvalueTextWidth,name=\tikzumlstructvalueName,draw=\tikzumlstructvalueDrawColor,fill=\tikzumlstructvalueFillColor,text=\tikzumlstructvalueTextColor,color=white,xscale=4.3,yscale=2.5]{#2};
+    \node[umlvalue, label=below:\tikzumlstructvalueType, label=center:\tikzumlstructvalueValue, #1] (\tikzumlstructvalueName) at (\tikzumlstructvalueName) {};
+}%
+
+\newenvironment{umlstruct}[2][]{%
+    \pgfkeys{/tikzuml/umlstruct/.cd, x/.initial=\tikzumlDefaultX, y/.initial=\tikzumlDefaultX, width/.initial=auto,%
+        name/.initial=umlstruct-\thetikzumlUseCaseNum,%
+        style/.style={},%
+    }%
+    \pgfkeys{struct/.style={regular polygon, regular polygon sides=6, minimum width=1cm, xscale=1.5, draw}}
+    \pgfkeys{/tikzuml/umlstruct/.cd, #1}%
+    \pgfkeys{/tikzuml/umlstruct/.cd,%
+        x/.get=\tikzumlstructX, y/.get=\tikzumlstructY,%
+        name/.get=\tikzumlstructName%
+    }%
+    %
+    \begin{umlsystem}[x=\tikzumlstructX,y=\tikzumlstructY]{#2}%
+}{
+    \end{umlsystem}
+}%
+
+
